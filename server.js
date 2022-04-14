@@ -1,10 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require("fs")
-const db = require("./db/db.json")
 const uuid = require('./helpers/uuid');
-const { notStrictEqual } = require('assert');
-const { json } = require('stream/consumers');
 const PORT = process.env.port || 3001;
 
 const app = express();
@@ -24,8 +21,8 @@ app.get('/api/notes', (req, res) => {
    if(err) {
      throw err;
    }  console.log(data);
-   data =JSON.parse(data);
-   res.json(data);
+   data = JSON.parse(data);
+    res.json(data);
 
   })
 });
@@ -100,6 +97,6 @@ app.post('/api/notes', (req, res) => {
 
 
 
-app.listen(PORT, () => {
-  console.log(`Example app listening at http://localhost:${PORT}`);
-});
+    app.listen(PORT, () =>
+    console.log(`App listening at http://localhost:${PORT} 🚀`)
+  );
