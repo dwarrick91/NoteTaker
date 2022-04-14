@@ -56,7 +56,7 @@ app.post('/api/notes', (req, res) => {
          // Write updated notes back to the file
          fs.writeFile(
            './db/db.json',
-           JSON.stringify(parsedNotes),
+           JSON.stringify(parsedNotes, null, 4),
            (writeErr) =>
              writeErr
                ? console.error(writeErr)
