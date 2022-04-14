@@ -4,6 +4,7 @@ const fs = require("fs")
 const db = require("./db/db.json")
 const uuid = require('./helpers/uuid');
 const { notStrictEqual } = require('assert');
+const { json } = require('stream/consumers');
 const PORT = process.env.port || 3001;
 
 const app = express();
@@ -19,7 +20,14 @@ app.get('/api/notes', (req, res) => {
   console.info(`${req.method} request received to get notes`);
 
   // Sending all notes to the client
-   res.json(db);
+  fs.readFile("./db/db.json", "utf8", (err,data) => {
+   if(err) {
+     throw err;
+   }  console.log(data);
+   data =JSON.parse(data);
+   res.json(data);
+
+  })
 });
 
 
