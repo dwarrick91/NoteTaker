@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require("fs")
 const db = require("./db/db.json")
 const uuid = require('./helpers/uuid');
+const { notStrictEqual } = require('assert');
 const PORT = process.env.port || 3001;
 
 const app = express();
@@ -17,20 +18,15 @@ app.get('/api/notes', (req, res) => {
   // Log our request to the terminal
   console.info(`${req.method} request received to get notes`);
 
-  // Sending all reviews to the client
-  return res.json(db);
+  // Sending all notes to the client
+   res.json(db);
 });
 
-app.get('/notes', (req, res) => {
-console.log(__dirname);
-  res.sendFile(path.join(__dirname, 'public/notes.html'))
-} 
-);
+
 
 app.post('/api/notes', (req, res) => {
   // Inform the client that their POST request was received
   res.json(`${req.method} request received to add a note`);
-
   // Log our request to the terminal
   console.info(`${req.method} request received to add a note`);
   
@@ -43,7 +39,7 @@ app.post('/api/notes', (req, res) => {
      const newNote = {
        title,
        text,
-       note_id: uuid(),
+       noteID: uuid(),
      };
  
      // Obtain existing notes
@@ -60,12 +56,13 @@ app.post('/api/notes', (req, res) => {
          // Write updated notes back to the file
          fs.writeFile(
            './db/db.json',
-           JSON.stringify(parsedNotes, null, 3),
+           JSON.stringify(parsedNotes),
            (writeErr) =>
              writeErr
                ? console.error(writeErr)
                : console.info('Successfully updated Notes!')
          );
+         
        }
      });
  
@@ -80,7 +77,17 @@ app.post('/api/notes', (req, res) => {
      res.status(500).json('Error in posting note');
    }
  });
-
+ 
+ app.get('/notes', (req, res) => {
+  console.log(__dirname);
+    res.sendFile(path.join(__dirname, 'public/notes.html'))
+  } 
+  );
+  app.get('*', (req, res) => {
+    console.log(__dirname);
+      res.sendFile(path.join(__dirname, 'public/index.html'))
+    } 
+    );
 
 
 
